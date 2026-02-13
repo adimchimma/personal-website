@@ -1,0 +1,241 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Rube Goldberg Machine</title>
+    <meta name="description"
+        content="(DEMO)Declarative Rube Goldberg chain reaction using A-frame animations and events.">
+
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
+
+    <script src="debug/extended-wasd-controls.js"></script>
+</head>
+
+<body>
+    <!-- #111 -->
+    <!-- <a-scene background="color: #fff" keyboard-shortcuts="enterVR: false"> -->
+    <a-scene inspector="url: https://cdn.jsdelivr.net/gh/c-frame/aframe-editor@1.7.x/dist/aframe-editor.min.js">
+        <a-assets timeout="2000">
+            <img id="ball-src" src="assets/basketball-gray.png">
+            <audio id="click-sound"
+                   preload="none"
+                   src="data:audio/wav;base64,UklGRgQCAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YeABAAB/xeLFfzkcOX7E4MN/Oh46fsLewn87IDx+wdzBfz0iPX7A2r9/PiQ+fr7Zvn8/JUB+vde9f0EnQX681bx/QilCfrvTun5DK0N+udK5f0QsRH640Lh+RS5GfrfOt39GL0d+ts22fkgxSH61y7V/STNJfrTKtH9KNEp+s8iyf0s2S36yx7F/TDdMf7HFsH9NOE1+sMSvf046Tn6vw65/TztPfq7Brn9QPFB/rcCtf1E+UX6sv6x/Uj9Sfqu9q39SQFN+qryqf1NCVH+pu6l/VENUfqi6qH9VRFV+qLinf1ZFVn6nt6d/V0ZXf6a2pn9XR1h+pbWlf1hIWH6ktKR/WUpZfqSzpH9aS1p+o7Kjf1pMW3+isaJ/W01bfqKwoX9cTlx+oa+hf11PXX6grqB/XU9dfp+tn39eUF5+n6yff15RX36eq55/X1Jffp6qnX5gU2B/namdf2BUYX6cqZx/YVVhfpyonH9iVmJ+m6ebf2JWYn6bppp/Y1djfpqlmn9jWGN+mqWZf2RZZH6ZpJl/ZFpkf5ijmH9lWmV+mKKYf2VbZX6Xopd/Zlxmfpehl39mXGZ+lqCWf2ddZ36WoJZ/Z15nfpaflX9oXmh+lZ6Vf2hfaH+VnpV/aWBpfpSdlH9pYGk=">
+            </audio>
+        </a-assets>
+        <!-- Click button → scissors close on rope → rope breaks → ball drops → hits plate → plate tilts → domino falls → gate opens → final bell rings -->
+        <a-entity camera position="-2.9 4.269 -1.6745" look-controls wasd-controls
+                  cursor="rayOrigin: mouse"
+                  raycaster="objects: .clickable">
+            <a-cursor></a-cursor>
+        </a-entity>
+
+        <!-- floor -->
+        <a-plane static-body rotation="-90 0 0" width="20" height="20" color="#444"></a-plane>
+
+        <!-- ceiling -->
+        <a-plane rotation="-90 0 0" width="20" height="20" color="#444" position="0 6 0" side="double"></a-plane>
+        
+        <!-- Back wall -->
+        <a-plane rotation="0 0 0" width="20" height="10" color="yellow" position="0 3 -10" side="double"></a-plane>
+
+        <!-- TODO: add surrounding walls -->
+        <!--      with the one in from of the camera being glass -->
+
+        <!-- Start button -->
+        <a-box id="button" class="clickable"
+            position="-2 1 -5"
+            depth="0.4"
+            height="0.3"
+            width="0.8"
+            color="#0f0"
+            sound="src: #click-sound; on: click"
+            animation__press="property: scale;
+                        startEvents: click;
+                        to: 0.9 0.8 0.9;
+                        dur: 120;
+                        dir: alternate;
+                        loop: 2"
+            animation__color="property: color;
+                        startEvents: click;
+                        from: red;
+                        to: #0f0;
+                        dur: 500"
+             emit-on-click="targets: #scissors,#rope-top,#rope-bottom; events: closeScissors">
+        </a-box>
+
+        <!-- Scissors - closer -->
+        <a-box id="scissors"
+            position="-3 4.165 -10"
+            depth="0.05"
+            height="0.2"
+            width="7"
+            color="red"
+            rotation="90 90 -30"
+            animation__close="property: rotation;
+                        startEvents: closeScissors;
+                        to: 90 90 30;
+                        dur: 400;
+                        easing: easeOutQuad">
+        </a-box>
+
+        <!-- Rope (2-part so it can split) -->
+        <a-cylinder id="rope-top"
+            position="-3.15 6 -5"
+            radius="0.03"
+            height="3.6"
+            color="#caa472"
+            animation__splitPos="property: position;
+                                                startEvents: closeScissors;
+                                                delay: 400;
+                        to: -3.15 5 -5;
+                        dur: 120;
+                        easing: easeOutQuad"
+            animation__splitScale="property: scale;
+                                                    startEvents: closeScissors;
+                                                    delay: 400;
+                          to: 1 0.01 1;
+                          dur: 120;
+                          easing: easeOutQuad">
+        </a-cylinder>
+        <!-- position="-3.15 1.05 -5" -->
+        <a-cylinder id="rope-bottom"
+            position="-3.15 4.1 -5"
+            radius="0.03"
+            height="0.35"
+            color="#caa472"
+            animation__drop="property: position;
+                             startEvents: closeScissors;
+                             delay: 520;
+                             to: -3.15 0.95 -5;
+                             dur: 900;
+                             easing: easeInQuad"
+            emit-on-animationcomplete="animation: drop; target: #plate; event: ballHitPlate">
+
+            <!-- Ball is physically attached (child of rope-bottom) -->
+            <a-sphere id="ball"
+                position="0 -0.35 0"
+                radius="0.2"
+                color="orange">
+            </a-sphere>
+        </a-cylinder>
+
+
+        <!-- Tilting plate -->
+        <a-box id="plate"
+            position="-3.15 0.45 -5.6"
+            depth="1"
+            height="0.08"
+            width="1"
+            color="#777"
+            rotation="0 0 0"
+            animation__tilt="property: rotation;
+                             startEvents: ballHitPlate;
+                             to: 25 0 0;
+                             dur: 500;
+                             easing: easeOutQuad"
+            emit-on-animationcomplete="animation: tilt; target: #domino-1; event: plateTriggered">
+        </a-box>
+
+        <!-- Dominoes (2) -->
+        <a-box id="domino-1"
+            position="-3.15 0.4 -6.2"
+            depth="0.1"
+            height="0.8"
+            width="0.35"
+            color="#3aa0ff"
+            rotation="0 0 0"
+            animation__fall="property: rotation;
+                             startEvents: plateTriggered;
+                             to: -80 0 0;
+                             dur: 450;
+                             easing: easeInQuad"
+            emit-on-animationcomplete="animation: fall; target: #domino-2; event: domino1Fell">
+        </a-box>
+
+        <a-box id="domino-2"
+            position="-3.15 0.4 -6.75"
+            depth="0.1"
+            height="0.8"
+            width="0.35"
+            color="#5bd16b"
+            rotation="0 0 0"
+            animation__fall="property: rotation;
+                             startEvents: domino1Fell;
+                             to: -80 0 0;
+                             dur: 450;
+                             easing: easeInQuad">
+        </a-box>
+
+        <a-box id="domino-2"
+            position="-3.15 0.4 -6.75"
+            depth="0.1"
+            height="0.8"
+            width="0.35"
+            color="#5bd16b"
+            rotation="0 0 0"
+            animation__fall="property: rotation;
+                             startEvents: domino1Fell;
+                             to: -80 0 0;
+                             dur: 450;
+                             easing: easeInQuad">
+        </a-box>
+
+
+
+
+        <!-- <a-entity id="camera" camera position="-3 1.2 -4" extended-wasd-controls="maxLookAngle: 60" -->
+        <!-- <a-entity id="camera" camera position="-2.9 4.269 -1.6745" extended-wasd-controls="maxLookAngle: 60"
+                    cursor="rayOrigin: mouse"
+                  raycaster="objects: .clickable">
+            <a-cursor></a-cursor>
+        </a-entity>
+    </a-scene> -->
+
+    <script>
+        AFRAME.registerComponent('emit-on-click', {
+            schema: {
+                targets: { type: 'string', default: '' },
+                events: { type: 'string', default: '' }
+            },
+            init: function () {
+                this.el.addEventListener('click', () => {
+                    const targets = this.data.targets.split(',').map((s) => s.trim()).filter(Boolean);
+                    const events = this.data.events.split(',').map((s) => s.trim()).filter(Boolean);
+                    for (let i = 0; i < targets.length; i += 1) {
+                        const targetEl = this.el.sceneEl.querySelector(targets[i]);
+                        if (!targetEl) {
+                            continue;
+                        }
+                        const eventName = events[i] || events[0];
+                        if (eventName) {
+                            targetEl.emit(eventName);
+                        }
+                    }
+                });
+            }
+        });
+
+        AFRAME.registerComponent('emit-on-animationcomplete', {
+            schema: {
+                animation: { type: 'string', default: '' },
+                target: { type: 'selector' },
+                event: { type: 'string', default: '' }
+            },
+            init: function () {
+                const animationName = (this.data.animation || '').trim();
+                const eventName = (this.data.event || '').trim();
+                if (!animationName || !eventName) {
+                    return;
+                }
+                this.el.addEventListener(`animationcomplete__${animationName}`, () => {
+                    if (this.data.target) {
+                        this.data.target.emit(eventName);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
