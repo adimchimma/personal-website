@@ -1,238 +1,465 @@
+<!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Rube Goldberg Machine</title>
     <meta name="description"
-        content="(DEMO)Declarative Rube Goldberg chain reaction using A-frame animations and events.">
+        content="Observation-room view of a stylized A-Frame Rube Goldberg machine inspired by heroic suit testing scenes.">
 
     <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
-    <script src="https://unpkg.com/aframe-event-set-component@5.0.0/dist/aframe-event-set-component.min.js"></script>
 
-    <script src="debug/extended-wasd-controls.js"></script>
+    <style>
+        html,
+        body {
+            margin: 0;
+            height: 100%;
+            background: #050816;
+        }
+    </style>
 </head>
 
 <body>
-    <!-- #111 -->
-    <!-- <a-scene background="color: #fff" keyboard-shortcuts="enterVR: false"> -->
-    <a-scene inspector="url: https://cdn.jsdelivr.net/gh/c-frame/aframe-editor@1.7.x/dist/aframe-editor.min.js">
+    <a-scene
+        background="color: #08101d"
+        inspector="url: https://cdn.jsdelivr.net/gh/c-frame/aframe-editor@1.7.x/dist/aframe-editor.min.js"
+        renderer="colorManagement: true"
+        vr-mode-ui="enabled: false">
         <a-assets timeout="2000">
             <img id="ball-src" src="assets/basketball-gray.png">
             <audio id="click-sound"
-                   preload="none"
-                   src="data:audio/wav;base64,UklGRgQCAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YeABAAB/xeLFfzkcOX7E4MN/Oh46fsLewn87IDx+wdzBfz0iPX7A2r9/PiQ+fr7Zvn8/JUB+vde9f0EnQX681bx/QilCfrvTun5DK0N+udK5f0QsRH640Lh+RS5GfrfOt39GL0d+ts22fkgxSH61y7V/STNJfrTKtH9KNEp+s8iyf0s2S36yx7F/TDdMf7HFsH9NOE1+sMSvf046Tn6vw65/TztPfq7Brn9QPFB/rcCtf1E+UX6sv6x/Uj9Sfqu9q39SQFN+qryqf1NCVH+pu6l/VENUfqi6qH9VRFV+qLinf1ZFVn6nt6d/V0ZXf6a2pn9XR1h+pbWlf1hIWH6ktKR/WUpZfqSzpH9aS1p+o7Kjf1pMW3+isaJ/W01bfqKwoX9cTlx+oa+hf11PXX6grqB/XU9dfp+tn39eUF5+n6yff15RX36eq55/X1Jffp6qnX5gU2B/namdf2BUYX6cqZx/YVVhfpyonH9iVmJ+m6ebf2JWYn6bppp/Y1djfpqlmn9jWGN+mqWZf2RZZH6ZpJl/ZFpkf5ijmH9lWmV+mKKYf2VbZX6Xopd/Zlxmfpehl39mXGZ+lqCWf2ddZ36WoJZ/Z15nfpaflX9oXmh+lZ6Vf2hfaH+VnpV/aWBpfpSdlH9pYGk=">
+                preload="none"
+                src="data:audio/wav;base64,UklGRgQCAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YeABAAB/xeLFfzkcOX7E4MN/Oh46fsLewn87IDx+wdzBfz0iPX7A2r9/PiQ+fr7Zvn8/JUB+vde9f0EnQX681bx/QilCfrvTun5DK0N+udK5f0QsRH640Lh+RS5GfrfOt39GL0d+ts22fkgxSH61y7V/STNJfrTKtH9KNEp+s8iyf0s2S36yx7F/TDdMf7HFsH9NOE1+sMSvf046Tn6vw65/TztPfq7Brn9QPFB/rcCtf1E+UX6sv6x/Uj9Sfqu9q39SQFN+qryqf1NCVH+pu6l/VENUfqi6qH9VRFV+qLinf1ZFVn6nt6d/V0ZXf6a2pn9XR1h+pbWlf1hIWH6ktKR/WUpZfqSzpH9aS1p+o7Kjf1pMW3+isaJ/W01bfqKwoX9cTlx+oa+hf11PXX6grqB/XU9dfp+tn39eUF5+n6yff15RX36eq55/X1Jffp6qnX5gU2B/namdf2BUYX6cqZx/YVVhfpyonH9iVmJ+m6ebf2JWYn6bppp/Y1djfpqlmn9jWGN+mqWZf2RZZH6ZpJl/ZFpkf5ijmH9lWmV+mKKYf2VbZX6Xopd/Zlxmfpehl39mXGZ+lqCWf2ddZ36WoJZ/Z15nfpaflX9oXmh+lZ6Vf2hfaH+VnpV/aWBpfpSdlH9pYGk=">
             </audio>
         </a-assets>
-        <!-- Click button → scissors close on rope → rope breaks → ball drops → hits plate → plate tilts → domino falls → gate opens → final bell rings -->
-        <a-entity camera position="-2.9 4.269 -1.6745" look-controls wasd-controls
-                  cursor="rayOrigin: mouse"
-                  raycaster="objects: .clickable">
-            <a-cursor></a-cursor>
+
+        <a-sky color="#09111f"></a-sky>
+
+        <a-entity id="camera-rig" position="0 2.65 7.35">
+            <a-entity
+                camera
+                rotation="-4 0 0"
+                cursor="rayOrigin: mouse"
+                raycaster="objects: .clickable">
+                <a-cursor color="#f8fafc"></a-cursor>
+            </a-entity>
         </a-entity>
 
-        <!-- floor -->
-        <a-plane static-body rotation="-90 0 0" width="20" height="20" color="#444"></a-plane>
+        <a-ambient-light color="#7f8ea1" intensity="0.65"></a-ambient-light>
+        <a-directional-light position="-2 6 5" color="#fff6dd" intensity="0.9"></a-directional-light>
+        <a-point-light position="-4.5 4.6 3.5" color="#ff7b72" intensity="0.35"></a-point-light>
+        <a-point-light position="4.5 4.2 3.8" color="#9ad7ff" intensity="0.25"></a-point-light>
 
-        <!-- ceiling -->
-        <a-plane rotation="-90 0 0" width="20" height="20" color="#444" position="0 6 0" side="double"></a-plane>
-        
-        <!-- Back wall -->
-        <a-plane rotation="0 0 0" width="20" height="10" color="yellow" position="0 3 -10" side="double"></a-plane>
+        <!-- Observation corridor -->
+        <a-plane rotation="-90 0 0" width="24" height="24" color="#2b323c" position="0 0 -2"></a-plane>
+        <a-plane rotation="-90 0 0" width="13" height="6" color="#3a4651" position="0 0.01 4.6"></a-plane>
 
-        <!-- TODO: add surrounding walls -->
-        <!--      with the one in from of the camera being glass -->
+        <a-box position="0 0.12 1.38" width="13.3" height="0.2" depth="0.35" color="#0f172a"></a-box>
+        <a-box position="-5.45 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#111827"></a-box>
+        <a-box position="-4.15 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#facc15"></a-box>
+        <a-box position="-2.85 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#111827"></a-box>
+        <a-box position="-1.55 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#facc15"></a-box>
+        <a-box position="-0.25 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#111827"></a-box>
+        <a-box position="1.05 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#facc15"></a-box>
+        <a-box position="2.35 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#111827"></a-box>
+        <a-box position="3.65 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#facc15"></a-box>
+        <a-box position="4.95 0.13 1.38" width="1.3" height="0.02" depth="0.28" color="#111827"></a-box>
 
-        <!-- Start button -->
-        <a-box id="button" class="clickable"
-            position="-2 1 -5"
-            depth="0.4"
-            height="0.3"
-            width="0.8"
-            color="#0f0"
+        <a-cylinder position="-4.6 0.76 4.6" radius="0.48" height="1.52" color="#3b4550"></a-cylinder>
+        <a-cylinder position="-4.6 1.55 4.6" radius="0.6" height="0.12" color="#5e6a77"></a-cylinder>
+        <a-sphere
+            id="pedestal-light"
+            position="-4.6 1.38 5.04"
+            radius="0.08"
+            color="#7f1d1d"
+            animation__complete="property: color; startEvents: testsComplete; to: #43aa8b; dur: 320">
+        </a-sphere>
+
+        <a-box
+            id="button"
+            class="clickable"
+            position="-4.6 1.72 4.6"
+            width="0.95"
+            height="0.22"
+            depth="0.95"
+            color="#f94144"
             sound="src: #click-sound; on: click"
-            animation__press="property: scale;
-                        startEvents: click;
-                        to: 0.9 0.8 0.9;
-                        dur: 120;
-                        dir: alternate;
-                        loop: 2"
-            animation__color="property: color;
-                        startEvents: click;
-                        from: red;
-                        to: #0f0;
-                        dur: 500"
-             emit-on-click="targets: #scissors,#rope-top,#rope-bottom; events: closeScissors">
+            animation__press="property: scale; startEvents: click; to: 0.9 0.65 0.9; dur: 120; dir: alternate; loop: 2"
+            animation__flash="property: color; startEvents: click; to: #f9c74f; dur: 140; dir: alternate; loop: 2"
+            emit-on-click="targets: #alarm-bulb,#scissor-left,#scissor-right,#rope-top,#rope-bottom; events: machineStart; once: true">
         </a-box>
 
-        <!-- Scissors - closer -->
-        <a-box id="scissors"
-            position="-3 4.165 -10"
-            depth="0.05"
-            height="0.2"
-            width="7"
-            color="red"
-            rotation="90 90 -30"
-            animation__close="property: rotation;
-                        startEvents: closeScissors;
-                        to: 90 90 30;
-                        dur: 400;
-                        easing: easeOutQuad">
-        </a-box>
+        <!-- Observer group -->
+        <a-entity id="observers" position="4.45 0 4.35">
+            <a-entity position="-1.15 0 0">
+                <a-cylinder position="0 0.82 0" radius="0.28" height="1.64" color="#111827"></a-cylinder>
+                <a-sphere position="0 1.86 0" radius="0.28" color="#f0c7a1"></a-sphere>
+                <a-sphere position="0 1.98 0" radius="0.33" scale="1.2 0.82 1" color="#161616"></a-sphere>
+                <a-ring position="-0.08 1.84 0.26" radius-inner="0.018" radius-outer="0.046" color="#0f172a"></a-ring>
+                <a-ring position="0.08 1.84 0.26" radius-inner="0.018" radius-outer="0.046" color="#0f172a"></a-ring>
+                <a-box position="0 0.45 0.19" width="0.54" height="0.22" depth="0.08" color="#1f2937"></a-box>
+            </a-entity>
 
-        <!-- Rope (2-part so it can split) -->
-        <a-cylinder id="rope-top"
-            position="-3.15 6 -5"
-            radius="0.03"
-            height="3.6"
-            color="#caa472"
-            animation__splitPos="property: position;
-                                                startEvents: closeScissors;
-                                                delay: 400;
-                        to: -3.15 5 -5;
-                        dur: 120;
-                        easing: easeOutQuad"
-            animation__splitScale="property: scale;
-                                                    startEvents: closeScissors;
-                                                    delay: 400;
-                          to: 1 0.01 1;
-                          dur: 120;
-                          easing: easeOutQuad">
+            <a-entity position="0.15 0 0.08">
+                <a-cylinder position="0 0.95 0" radius="0.33" height="1.9" color="#475569"></a-cylinder>
+                <a-sphere position="0 2.13 0" radius="0.3" color="#f2d3b2"></a-sphere>
+                <a-box position="0 1.45 0.2" width="0.86" height="0.18" depth="0.1" color="#334155"></a-box>
+            </a-entity>
+
+            <a-entity position="1.2 0 -0.05">
+                <a-cylinder position="0 0.58 0" radius="0.22" height="1.16" color="#6b7280"></a-cylinder>
+                <a-sphere position="0 1.38 0" radius="0.22" color="#f1cba8"></a-sphere>
+                <a-sphere position="0 1.5 0" radius="0.24" scale="1.05 0.78 1" color="#7c3f00"></a-sphere>
+            </a-entity>
+        </a-entity>
+
+        <!-- Test chamber -->
+        <a-plane rotation="-90 0 0" width="13.3" height="13.2" color="#52554f" position="0 0.02 -5"></a-plane>
+        <a-plane rotation="-90 0 0" width="13.3" height="13.2" color="#4a4d47" position="0 5.85 -5" side="double"></a-plane>
+        <a-plane width="13.3" height="5.8" color="#cbc29d" position="0 2.9 -11.6" side="double"></a-plane>
+        <a-plane rotation="0 90 0" width="13.2" height="5.8" color="#b6ae8f" position="-6.65 2.9 -5" side="double"></a-plane>
+        <a-plane rotation="0 90 0" width="13.2" height="5.8" color="#b6ae8f" position="6.65 2.9 -5" side="double"></a-plane>
+
+        <a-box position="0 0.6 -11.52" width="12.5" height="0.16" depth="0.08" color="#374151"></a-box>
+        <a-box position="-6.55 0.6 -5" width="0.16" height="0.16" depth="12.9" color="#374151"></a-box>
+        <a-box position="6.55 0.6 -5" width="0.16" height="0.16" depth="12.9" color="#374151"></a-box>
+
+        <!-- Glass wall and frame -->
+        <a-plane
+            position="0 2.75 1.45"
+            width="12.8"
+            height="5"
+            scale="1 1.15 1"
+            material="shader: standard; color: #b9e7ff; transparent: true; opacity: 0.17; metalness: 0.2; roughness: 0.05"
+            side="double">
+        </a-plane>
+        <a-plane
+            position="-3.7 2.75 1.42"
+            width="1.1"
+            height="4.7"
+            rotation="0 0 8"
+            material="color: #ffffff; transparent: true; opacity: 0.05"
+            side="double">
+        </a-plane>
+        <a-plane
+            position="3.35 2.75 1.42"
+            width="0.75"
+            height="4.7"
+            rotation="0 0 -8"
+            material="color: #ffffff; transparent: true; opacity: 0.04"
+            side="double">
+        </a-plane>
+        <a-box position="0 5.736 1.35" width="13.3" height="0.28" depth="0.18" color="#2d3748"></a-box>
+        <a-box position="0 0.22 1.35" width="13.3" height="0.28" depth="0.18" color="#2d3748"></a-box>
+        <a-box position="-6.65 2.76 1.35" width="0.28" height="5.1" depth="0.18" color="#2d3748" scale="1 1.24 1"></a-box>
+        <a-box position="6.65 2.76 1.35" width="0.28" height="5.1" depth="0.18" color="#2d3748" scale="1 1.24 1"></a-box>
+
+        <!-- Chamber machine -->
+        <a-entity id="alarm-light" position="-5.8 5.12 -3.8">
+            <a-cylinder radius="0.18" height="0.12" color="#2b2f36"></a-cylinder>
+            <a-sphere
+                id="alarm-bulb"
+                position="0 0.14 0"
+                radius="0.16"
+                color="#7f1d1d"
+                animation__pulse="property: color; startEvents: machineStart; from: #7f1d1d; to: #ff595e; dur: 180; dir: alternate; loop: 8">
+            </a-sphere>
+        </a-entity>
+
+        <a-entity id="scissor-rig" position="-5.15 4.78 -6.45">
+            <a-cylinder position="0 0 0" radius="0.06" height="0.22" color="#1f2937" rotation="90 0 0"></a-cylinder>
+
+            <a-entity
+                id="scissor-left"
+                rotation="0 0 -30"
+                animation__close="property: rotation; startEvents: machineStart; to: 0 0 -7; dur: 300; easing: easeOutQuad">
+                <a-box position="1.2 0 0.03" width="2.4" height="0.09" depth="0.05" color="#d62828"></a-box>
+                <a-torus position="-0.25 0.15 0.03" radius="0.18" radius-tubular="0.035" color="#3f3f46"></a-torus>
+            </a-entity>
+
+            <a-entity
+                id="scissor-right"
+                rotation="0 0 30"
+                animation__close="property: rotation; startEvents: machineStart; to: 0 0 7; dur: 300; easing: easeOutQuad">
+                <a-box position="1.2 0 -0.03" width="2.4" height="0.09" depth="0.05" color="#ef4444"></a-box>
+                <a-torus position="-0.25 -0.15 -0.03" radius="0.18" radius-tubular="0.035" color="#3f3f46"></a-torus>
+            </a-entity>
+        </a-entity>
+
+        <a-cylinder
+            id="rope-top"
+            position="-4.72 5.32 -6.4"
+            radius="0.035"
+            height="1.2"
+            color="#d4a373"
+            animation__splitPos="property: position; startEvents: machineStart; delay: 220; to: -4.72 5.85 -6.4; dur: 140; easing: easeOutQuad"
+            animation__splitScale="property: scale; startEvents: machineStart; delay: 220; to: 1 0.01 1; dur: 140; easing: easeOutQuad">
         </a-cylinder>
-        <!-- position="-3.15 1.05 -5" -->
-        <a-cylinder id="rope-bottom"
-            position="-3.15 4.1 -5"
-            radius="0.03"
-            height="0.35"
-            color="#caa472"
-            animation__drop="property: position;
-                             startEvents: closeScissors;
-                             delay: 520;
-                             to: -3.15 0.95 -5;
-                             dur: 900;
-                             easing: easeInQuad"
-            emit-on-animationcomplete="animation: drop; target: #plate; event: ballHitPlate">
 
-            <!-- Ball is physically attached (child of rope-bottom) -->
-            <a-sphere id="ball"
-                position="0 -0.35 0"
-                radius="0.2"
-                color="orange">
+        <a-cylinder
+            id="rope-bottom"
+            position="-4.72 3.5 -6.4"
+            radius="0.035"
+            height="2.4"
+            color="#d4a373"
+            animation__drop="property: position; startEvents: machineStart; delay: 360; to: -4.72 2 -6.4; dur: 720; easing: easeInQuad"
+            emit-on-animationcomplete="animation: drop; targets: #impact-plate; event: weightHitPlate">
+            <a-sphere
+                position="0 -1.35 0"
+                radius="0.38"
+                material="src: #ball-src; color: #d1d5db">
             </a-sphere>
         </a-cylinder>
 
-
-        <!-- Tilting plate -->
-        <a-box id="plate"
-            position="-3.15 0.45 -5.6"
-            depth="1"
-            height="0.08"
-            width="1"
-            color="#777"
+        <a-cylinder position="-4 0.3 -6.8" radius="0.09" height="0.34" color="#646c76"></a-cylinder>
+        <a-box
+            id="impact-plate"
+            position="-4 0.58 -6.8"
+            width="1.8"
+            height="0.12"
+            depth="0.5"
+            color="#7c8797"
             rotation="0 0 0"
-            animation__tilt="property: rotation;
-                             startEvents: ballHitPlate;
-                             to: 25 0 0;
-                             dur: 500;
-                             easing: easeOutQuad"
-            emit-on-animationcomplete="animation: tilt; target: #domino-1; event: plateTriggered">
+            animation__tilt="property: rotation; startEvents: weightHitPlate; to: 0 0 18; dur: 350; easing: easeOutQuad"
+            emit-on-animationcomplete="animation: tilt; targets: #domino-1; event: startDomino">
         </a-box>
 
-        <!-- Dominoes (2) -->
-        <a-box id="domino-1"
-            position="-3.15 0.4 -6.2"
-            depth="0.1"
-            height="0.8"
-            width="0.35"
-            color="#3aa0ff"
-            rotation="0 0 0"
-            animation__fall="property: rotation;
-                             startEvents: plateTriggered;
-                             to: -80 0 0;
-                             dur: 450;
-                             easing: easeInQuad"
-            emit-on-animationcomplete="animation: fall; target: #domino-2; event: domino1Fell">
+        <a-box
+            id="domino-1"
+            position="-2.95 0.5 -6.8"
+            width="0.2"
+            height="1"
+            depth="0.5"
+            color="#4ea8de"
+            animation__fall="property: rotation; startEvents: startDomino; to: 0 0 -75; dur: 220; easing: easeInQuad"
+            emit-on-animationcomplete="animation: fall; targets: #domino-2; event: topple">
         </a-box>
 
-        <a-box id="domino-2"
-            position="-3.15 0.4 -6.75"
-            depth="0.1"
-            height="0.8"
-            width="0.35"
-            color="#5bd16b"
-            rotation="0 0 0"
-            animation__fall="property: rotation;
-                             startEvents: domino1Fell;
-                             to: -80 0 0;
-                             dur: 450;
-                             easing: easeInQuad">
+        <a-box
+            id="domino-2"
+            position="-2.15 0.5 -6.8"
+            width="0.2"
+            height="1"
+            depth="0.5"
+            color="#54c7ec"
+            animation__fall="property: rotation; startEvents: topple; to: 0 0 -75; dur: 220; easing: easeInQuad"
+            emit-on-animationcomplete="animation: fall; targets: #domino-3; event: topple">
         </a-box>
 
-        <!-- <a-box id="domino-2"
-            position="-3.15 0.4 -6.75"
-            depth="0.1"
-            height="0.8"
-            width="0.35"
-            color="#5bd16b"
-            rotation="0 0 0"
-            animation__fall="property: rotation;
-                             startEvents: domino1Fell;
-                             to: -80 0 0;
-                             dur: 450;
-                             easing: easeInQuad">
-        </a-box> -->
-<!-- https://github.com/A-Frame-related/aframe-editor?tab=readme-ov-file -->
+        <a-box
+            id="domino-3"
+            position="-1.35 0.5 -6.8"
+            width="0.2"
+            height="1"
+            depth="0.5"
+            color="#8ecae6"
+            animation__fall="property: rotation; startEvents: topple; to: 0 0 -75; dur: 220; easing: easeInQuad"
+            emit-on-animationcomplete="animation: fall; targets: #domino-4; event: topple">
+        </a-box>
 
+        <a-box
+            id="domino-4"
+            position="-0.55 0.5 -6.8"
+            width="0.2"
+            height="1"
+            depth="0.5"
+            color="#90be6d"
+            animation__fall="property: rotation; startEvents: topple; to: 0 0 -75; dur: 220; easing: easeInQuad"
+            emit-on-animationcomplete="animation: fall; targets: #gate; event: openGate">
+        </a-box>
 
+        <a-box position="0.1 0.74 -6.8" width="0.14" height="1.82" depth="0.92" color="#3f4754"></a-box>
+        <a-box
+            id="gate"
+            position="0.16 0.95 -6.8"
+            width="0.12"
+            height="1.6"
+            depth="0.82"
+            color="#67717d"
+            animation__open="property: position; startEvents: openGate; to: 0.16 1.92 -6.8; dur: 350; easing: easeOutQuad"
+            emit-on-animationcomplete="animation: open; targets: #runner-ball; event: releaseBall">
+        </a-box>
 
-        <!-- <a-entity id="camera" camera position="-3 1.2 -4" extended-wasd-controls="maxLookAngle: 60" -->
-        <!-- <a-entity id="camera" camera position="-2.9 4.269 -1.6745" extended-wasd-controls="maxLookAngle: 60"
-                    cursor="rayOrigin: mouse"
-                  raycaster="objects: .clickable">
-            <a-cursor></a-cursor>
+        <a-box position="2.45 0.25 -6.64" width="4" height="0.06" depth="0.08" color="#9aa5b1"></a-box>
+        <a-box position="2.45 0.25 -6.96" width="4" height="0.06" depth="0.08" color="#9aa5b1"></a-box>
+        <a-box position="2.45 0.17 -6.8" width="4" height="0.04" depth="0.4" color="#374151"></a-box>
+
+        <a-sphere
+            id="runner-ball"
+            position="0.85 0.47 -6.8"
+            radius="0.28"
+            material="src: #ball-src; color: #f3f4f6"
+            animation__roll="property: position; startEvents: releaseBall; to: 4.4 0.47 -6.8; dur: 900; easing: linear"
+            animation__spin="property: rotation; startEvents: releaseBall; to: 0 0 -1080; dur: 900; easing: linear"
+            emit-on-animationcomplete="animation: roll; targets: #bell-rig,#fan-blades,#flame,#coolant-spray,#suit-core; event: testSuit">
+        </a-sphere>
+
+        <!-- Suit test zone -->
+        <a-plane
+            id="result-panel"
+            position="4.6 4.42 -10.95"
+            width="2.6"
+            height="0.86"
+            color="#631b1b"
+            animation__pass="property: color; startEvents: testsComplete; to: #2f855a; dur: 280">
+        </a-plane>
+        <a-sphere
+            id="status-light"
+            position="4.6 4.96 -8.9"
+            radius="0.16"
+            color="#8c1d18"
+            animation__pass="property: color; startEvents: testsComplete; to: #43aa8b; dur: 280">
+        </a-sphere>
+
+        <a-entity position="4.6 0 -8.35">
+            <a-cylinder position="0 0.12 0" radius="0.95" height="0.24" color="#3f3b32"></a-cylinder>
+
+            <a-entity id="test-dummy" position="0 0.22 0">
+                <a-cylinder
+                    id="suit-core"
+                    position="0 0.96 0"
+                    radius="0.38"
+                    height="1.58"
+                    color="#b0bccd"
+                    animation__flash="property: color; startEvents: testSuit; to: #f4d35e; dur: 160; dir: alternate; loop: 2">
+                </a-cylinder>
+                <a-sphere position="0 1.98 0" radius="0.28" color="#f1d0ae"></a-sphere>
+                <a-box position="-0.58 1.22 0" width="0.72" height="0.14" depth="0.18" rotation="0 0 20" color="#c8d3df"></a-box>
+                <a-box position="0.58 1.22 0" width="0.72" height="0.14" depth="0.18" rotation="0 0 -20" color="#c8d3df"></a-box>
+                <a-box position="-0.18 0.18 0" width="0.16" height="0.86" depth="0.18" rotation="0 0 7" color="#c8d3df"></a-box>
+                <a-box position="0.18 0.18 0" width="0.16" height="0.86" depth="0.18" rotation="0 0 -7" color="#c8d3df"></a-box>
+                <a-plane position="0 1.03 0.2" width="0.72" height="1.08" color="#b11226" side="double"></a-plane>
+                <a-plane position="0 1.03 -0.2" width="0.54" height="0.82" color="#c1121f" side="double"></a-plane>
+            </a-entity>
         </a-entity>
-    </a-scene> -->
+
+        <a-cylinder position="3.35 1.18 -8.3" radius="0.12" height="0.6" rotation="0 0 90" color="#374151"></a-cylinder>
+        <a-cone
+            id="flame"
+            position="3.82 1.18 -8.3"
+            rotation="0 0 90"
+            radius-bottom="0.24"
+            radius-top="0.02"
+            height="0.92"
+            color="#ff6b35"
+            scale="0.01 0.01 0.01"
+            animation__ignite="property: scale; startEvents: testSuit; to: 1 1 1; dur: 170; dir: alternate; loop: 2">
+        </a-cone>
+
+        <a-cylinder position="5.85 1.18 -8.3" radius="0.12" height="0.6" rotation="0 0 90" color="#374151"></a-cylinder>
+        <a-cone
+            id="coolant-spray"
+            position="5.38 1.18 -8.3"
+            rotation="0 0 -90"
+            radius-bottom="0.24"
+            radius-top="0.02"
+            height="0.92"
+            color="#7dd3fc"
+            scale="0.01 0.01 0.01"
+            animation__spray="property: scale; startEvents: testSuit; delay: 150; to: 1 1 1; dur: 170; dir: alternate; loop: 2">
+        </a-cone>
+
+        <a-entity position="4.6 3.05 -8.55">
+            <a-cylinder radius="0.15" height="0.2" color="#475569"></a-cylinder>
+            <a-entity
+                id="fan-blades"
+                rotation="90 0 0"
+                animation__spin="property: rotation; startEvents: testSuit; to: 90 0 1440; dur: 1000; easing: linear">
+                <a-box position="0.48 0 0" width="0.86" height="0.1" depth="0.02" color="#94a3b8"></a-box>
+                <a-box position="-0.48 0 0" width="0.86" height="0.1" depth="0.02" color="#94a3b8"></a-box>
+                <a-box position="0 0.48 0" width="0.1" height="0.86" depth="0.02" color="#94a3b8"></a-box>
+                <a-box position="0 -0.48 0" width="0.1" height="0.86" depth="0.02" color="#94a3b8"></a-box>
+            </a-entity>
+        </a-entity>
+
+        <a-entity
+            id="bell-rig"
+            position="4.55 4.03 -8.2"
+            animation__ring="property: rotation; startEvents: testSuit; to: 0 0 16; dur: 130; dir: alternate; loop: 6"
+            emit-on-animationcomplete="animation: ring; targets: #status-light,#pedestal-light,#result-panel; event: testsComplete">
+            <a-cylinder position="0 0.28 0" radius="0.04" height="0.55" color="#d9d9d9"></a-cylinder>
+            <a-cone position="0 -0.05 0" radius-bottom="0.45" radius-top="0.12" height="0.7" color="#f4a261"></a-cone>
+            <a-sphere position="0 -0.4 0" radius="0.06" color="#c2410c"></a-sphere>
+        </a-entity>
+    </a-scene>
 
     <script>
+        function parseList(value) {
+            return (value || '')
+                .split(',')
+                .map((item) => item.trim())
+                .filter(Boolean);
+        }
+
+        function emitToSelector(sceneEl, selector, eventName) {
+            if (!sceneEl || !selector || !eventName) {
+                return;
+            }
+
+            const targetEl = sceneEl.querySelector(selector);
+            if (targetEl) {
+                targetEl.emit(eventName);
+            }
+        }
+
         AFRAME.registerComponent('emit-on-click', {
             schema: {
                 targets: { type: 'string', default: '' },
-                events: { type: 'string', default: '' }
+                events: { type: 'string', default: '' },
+                once: { type: 'boolean', default: false }
             },
             init: function () {
-                this.el.addEventListener('click', () => {
-                    const targets = this.data.targets.split(',').map((s) => s.trim()).filter(Boolean);
-                    const events = this.data.events.split(',').map((s) => s.trim()).filter(Boolean);
-                    for (let i = 0; i < targets.length; i += 1) {
-                        const targetEl = this.el.sceneEl.querySelector(targets[i]);
-                        if (!targetEl) {
-                            continue;
-                        }
-                        const eventName = events[i] || events[0];
-                        if (eventName) {
-                            targetEl.emit(eventName);
-                        }
+                this.hasFired = false;
+                this.onClick = () => {
+                    if (this.data.once && this.hasFired) {
+                        return;
                     }
-                });
+
+                    const targets = parseList(this.data.targets);
+                    const events = parseList(this.data.events);
+
+                    targets.forEach((selector, index) => {
+                        const eventName = events[index] || events[0];
+                        emitToSelector(this.el.sceneEl, selector, eventName);
+                    });
+
+                    this.hasFired = true;
+                };
+
+                this.el.addEventListener('click', this.onClick);
+            },
+            remove: function () {
+                this.el.removeEventListener('click', this.onClick);
             }
         });
 
         AFRAME.registerComponent('emit-on-animationcomplete', {
             schema: {
                 animation: { type: 'string', default: '' },
-                target: { type: 'selector' },
+                targets: { type: 'string', default: '' },
                 event: { type: 'string', default: '' }
             },
             init: function () {
                 const animationName = (this.data.animation || '').trim();
                 const eventName = (this.data.event || '').trim();
+
                 if (!animationName || !eventName) {
                     return;
                 }
-                this.el.addEventListener(`animationcomplete__${animationName}`, () => {
-                    if (this.data.target) {
-                        this.data.target.emit(eventName);
-                    }
-                });
+
+                this.onAnimationComplete = () => {
+                    const targets = parseList(this.data.targets);
+                    targets.forEach((selector) => emitToSelector(this.el.sceneEl, selector, eventName));
+                };
+
+                this.el.addEventListener(`animationcomplete__${animationName}`, this.onAnimationComplete);
+            },
+            remove: function () {
+                const animationName = (this.data.animation || '').trim();
+                if (animationName && this.onAnimationComplete) {
+                    this.el.removeEventListener(`animationcomplete__${animationName}`, this.onAnimationComplete);
+                }
             }
         });
     </script>
