@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Verlet Integrator Playground</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1f2933;
+        }
+
+        main {
+            width: min(920px, calc(100% - 32px));
+            margin: 32px auto;
+        }
+
+        h1 {
+            margin: 0 0 16px;
+        }
+
+        p {
+            margin: 0 0 16px;
+            max-width: 60ch;
+            line-height: 1.5;
+        }
+
+        #canvas-container {
+            width: fit-content;
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1>Verlet Integrator Playground</h1>
+        <p>Drag particles with the mouse. Use <strong>1</strong> for chain, <strong>2</strong> for cloth,
+            <strong>R</strong> to reset, and <strong>D</strong> to toggle the debug view.</p>
+        <div id="canvas-container"></div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+
+    <script src="js/verlet-core.js"></script>
+    <script src="js/builders.js"></script>
+    <script src="js/sketch.js"></script>
+</body>
+
+</html>
