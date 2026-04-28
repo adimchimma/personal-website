@@ -1,67 +1,203 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Adimchimma Odornyirikeotuonye">
-        <title> home | Adimchimma Odor - personal website </title>
-        <script>
-            let scheme = localStorage.getItem('color-scheme')
-                || document.documentElement.getAttribute('color-scheme')
-                || 'auto'
-            console.log(scheme)
-
-            if (scheme === 'auto') {
-                scheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-            }
-            document.documentElement.setAttribute('color-scheme', scheme);
-
-            (function(f){
-                if (document.readyState === "loading") {
-                    document.addEventListener("DOMContentLoaded", f);
-                } else {
-                    f();
-                }})(function() {
-                    const btn = document.getElementById('color-scheme-btn')
-                    btn.innerHTML = localStorage.getItem('color-scheme') || 'auto'
-                    btn.addEventListener("click", e => {
-                    const colorSchemes =
-                        window.matchMedia('(prefers-color-scheme: dark)').matches
-                        ? [ 'auto', 'light', 'dark' ]
-                        : [ 'auto', 'dark', 'light' ]
-                    let scheme = localStorage.getItem('color-scheme') || 'auto'
-                    scheme = colorSchemes[(colorSchemes.indexOf(scheme) + 1) % colorSchemes.length]
-                    localStorage.setItem("color-scheme", scheme);
-                    btn.innerHTML = scheme
-                    if (scheme === 'auto') {
-                        scheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
-                    }
-                    document.documentElement.setAttribute('color-scheme', scheme)
-                })
-            });
-            
-        </script>
-    </head>
-
-    <body>
-        <header class="page-header">
-            <nav>
-                <ul>
-                    <li style="margin-right: auto">
-                        <div>
-                            <a href="/">home</a>
-                        </div>
-                    </li>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Adimchimma Odornyirikeotuonye">
+    <meta name="description" content="Personal website of Adimchimma Clinton Odornyirikeotuonye, also known as Clinton Odor.">
+    <title>Home | Clinton Odor</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <script src="assets/js/main.js" defer></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container site-header__inner">
+            <a class="site-brand" href="index.html">
+                <span class="site-brand__name">Clinton Odor</span>
+                <span class="site-brand__meta">projects, research, papers, and notes</span>
+            </a>
+            <button class="theme-toggle" type="button" data-theme-toggle aria-label="Change color theme">
+                <span data-theme-label>theme: auto</span>
+            </button>
+        </div>
+        <nav class="site-nav" aria-label="Primary">
+            <div class="container site-nav__scroller">
+                <ul class="site-nav__list">
+                    <li><a aria-current="page" href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li><a href="projects.html">Projects</a></li>
+                    <li><a href="research.html">Research</a></li>
+                    <li><a href="theses.html">Theses</a></li>
+                    <li><a href="papers.html">Papers</a></li>
+                    <li><a href="posts.html">Posts</a></li>
+                    <li><a href="documents.html">Documents</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="contact.html">Contact</a></li>
                 </ul>
-            </nav>
-        </header>
-        <main>
-            <article>
-                <h1 id="about-me"></h1>
-                
-            </article>
-            <p> UNDER CONSTRUCTION </p>
-            <a href="./courses/index.html">Courses</a>
-        </main>
-    </body>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="section hero">
+            <div class="container hero__grid">
+                <div class="hero__content">
+                    <p class="eyebrow">Home</p>
+                    <h1 class="display-title">Adimchimma Clinton Odornyirikeotuonye</h1>
+                    <p class="lede">
+                        I usually go by Clinton Odor. I am a mathematics and computer science student building a home
+                        for projects, research, papers, notes, and course work.
+                    </p>
+                    <div class="button-row">
+                        <a class="button button--primary" href="about.html">Read About</a>
+                        <a class="button button--secondary" href="research.html">Browse Research</a>
+                        <a class="button button--secondary" href="courses.html">Find Courses</a>
+                    </div>
+                    <p class="small-note">
+                        Pronunciation clips for my full name will live here once they are recorded.
+                    </p>
+                </div>
+
+                <aside class="panel panel--accent">
+                    <h2 class="panel__title">Current focuses</h2>
+                    <ul class="tag-list" aria-label="Current focuses">
+                        <li>Category Theory</li>
+                        <li>Surgery Theory</li>
+                        <li>Formal Verification</li>
+                        <li>Denotational Semantics</li>
+                        <li>Domain Theory</li>
+                        <li>Quantum Computation</li>
+                        <li>Compilers</li>
+                    </ul>
+                    <p class="panel__text">
+                        The fuller introduction lives on the About page. The homepage keeps the short version and
+                        points into the rest of the archive.
+                    </p>
+                </aside>
+            </div>
+        </section>
+
+        <section class="section section--surface">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Now</p>
+                    <h2>Featured paths through the site</h2>
+                    <p>
+                        This first pass keeps the homepage brief: a quick introduction, a short research block, and
+                        clear paths to the sections that will grow over time.
+                    </p>
+                </div>
+
+                <div class="grid grid--three">
+                    <article class="card">
+                        <p class="card__kicker">Research</p>
+                        <h3>Research interests first</h3>
+                        <p>
+                            Start with the overview of current interests, then branch into theses, papers, and
+                            research-adjacent work as those sections fill in.
+                        </p>
+                        <a class="text-link" href="research.html">Visit Research</a>
+                    </article>
+
+                    <article class="card">
+                        <p class="card__kicker">Current project</p>
+                        <h3>Mac Plus emulator in Java</h3>
+                        <p>
+                            One of the live projects in the background of this site is a Mac Plus emulator. It belongs
+                            on the homepage as a sign that the archive also points to active work.
+                        </p>
+                        <a class="text-link" href="projects.html">See Projects</a>
+                    </article>
+
+                    <article class="card card--media">
+                        <img
+                            class="card__image"
+                            src="courses/csc-391-extended-web-technologies/projects/rube-goldberg-machine/assets/basketball-gray.png"
+                            alt="Basketball asset from the CSC 391 Rube Goldberg Machine project">
+                        <div class="card__body">
+                            <p class="card__kicker">Courses</p>
+                            <h3>Class work stays easy to find</h3>
+                            <p>
+                                During the semester, course projects remain in their own section so your professor has
+                                a clean path to finished demos.
+                            </p>
+                            <a class="text-link" href="courses.html">Open Courses</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="section-heading">
+                    <p class="eyebrow">Browse</p>
+                    <h2>Site map</h2>
+                    <p>
+                        The site is organized by content type so different readers can find what they need without
+                        sorting through everything at once.
+                    </p>
+                </div>
+
+                <div class="grid grid--four">
+                    <article class="card">
+                        <h3>About</h3>
+                        <p>A fuller introduction, current focuses, and the broader shape of the site.</p>
+                        <a class="text-link" href="about.html">Open About</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Projects</h3>
+                        <p>Independent projects, course work, and the bridge between implementation and ideas.</p>
+                        <a class="text-link" href="projects.html">Open Projects</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Research</h3>
+                        <p>Research threads, notes, and the pages that connect long-form work together.</p>
+                        <a class="text-link" href="research.html">Open Research</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Theses</h3>
+                        <p>A dedicated home for current and future thesis work.</p>
+                        <a class="text-link" href="theses.html">Open Theses</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Papers</h3>
+                        <p>Formal and expository writing that belongs in a more archival academic register.</p>
+                        <a class="text-link" href="papers.html">Open Papers</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Posts</h3>
+                        <p>Technical notes and reflective writing that can stay shorter and more provisional.</p>
+                        <a class="text-link" href="posts.html">Open Posts</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Documents</h3>
+                        <p>Math and computer science CVs, plus a separate industry resume.</p>
+                        <a class="text-link" href="documents.html">Open Documents</a>
+                    </article>
+
+                    <article class="card">
+                        <h3>Contact</h3>
+                        <p>A small page for email and professional links without crowding the footer.</p>
+                        <a class="text-link" href="contact.html">Open Contact</a>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container site-footer__inner">
+            <p>Clinton Odor</p>
+            <p>Personal website in progress, built to grow alongside projects, research, and writing.</p>
+            <p>&copy; <span data-current-year>2026</span></p>
+        </div>
+    </footer>
+</body>
 </html>
