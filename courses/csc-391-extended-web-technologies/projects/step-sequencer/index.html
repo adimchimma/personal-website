@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Step Sequencer</title>
+    <meta name="description" content="An eight-track Tone.js step sequencer built as a static web project.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <h1>STEP SEQUENCER</h1>
+        <p>TONE.JS · 8 TRACKS · 16 STEPS</p>
+    </header>
+
+    <div class="transport">
+        <button id="play-btn" title="Play / Pause">▶</button>
+        <button id="stop-btn" title="Stop &amp; Reset">■</button>
+
+        <div class="bpm-group">
+            <label>TEMPO</label>
+            <div class="bpm-row">
+                <input type="range" id="bpm-slider" min="60" max="200" step="1" value="120">
+                <span id="bpm-display">120 BPM</span>
+            </div>
+        </div>
+
+        <div class="bpm-group">
+            <label>SWING</label>
+            <div class="bpm-row">
+                <input type="range" id="swing-slider" min="0" max="1" step="0.01" value="0">
+                <span id="swing-display" class="effect-val">0%</span>
+            </div>
+        </div>
+
+        <div class="transport-info">
+            <span>STEP</span>
+            <span class="step-counter" id="step-counter">–</span>
+        </div>
+
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-left:auto;">
+            <button class="pattern-btn" id="randomize-btn">RANDOM</button>
+            <button class="pattern-btn" id="clear-btn">CLEAR</button>
+            <button class="pattern-btn" id="save-btn">SAVE</button>
+            <button class="pattern-btn" id="load-btn">LOAD</button>
+        </div>
+    </div>
+
+    <div class="sequencer" id="sequencer"></div>
+
+    <div class="panel">
+        <h2>FX · MASTER CHAIN</h2>
+        <div class="effects-row">
+
+            <div class="effect-group">
+                <label>REVERB MIX</label>
+                <div class="effect-row">
+                    <input type="range" id="reverb-mix" min="0" max="1" step="0.01" value="0.15">
+                    <span class="effect-val" id="reverb-val">15%</span>
+                </div>
+            </div>
+
+            <div class="effect-group">
+                <label>DELAY MIX</label>
+                <div class="effect-row">
+                    <input type="range" id="delay-mix" min="0" max="1" step="0.01" value="0">
+                    <span class="effect-val" id="delay-val">0%</span>
+                </div>
+            </div>
+
+            <div class="effect-group">
+                <label>MASTER VOL</label>
+                <div class="effect-row">
+                    <input type="range" id="master-vol" min="-30" max="0" step="1" value="-6">
+                    <span class="effect-val" id="vol-val">-6 dB</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="js/app.js" type="module"></script>
+</body>
+
+</html>
